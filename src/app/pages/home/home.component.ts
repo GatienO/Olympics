@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { OlympicService } from 'src/app/core/services/olympic.service';
-import { BaseChartDirective } from 'ng2-charts';
 import { Chart } from 'chart.js/auto';
+import { Router } from '@angular/router';
+import { Olympic } from 'src/app/core/models/Olympic';
 
 @Component({
   selector: 'app-home',
@@ -10,50 +10,46 @@ import { Chart } from 'chart.js/auto';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  olympics: Olympic[] = [];
   chart: any;
-  public olympics$: Observable<any> = of(null);
 
-  constructor(private olympicService: OlympicService) {}
+  constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
-
-    this.olympics$ = this.olympicService.getOlympics();
-    console.log(this.olympics$);
-
-
-    this.olympicService.getOlympics().subscribe(data => {
-      const countries = data.map((item: any) => item.country); // Noms des pays
-      const participations = data.map((item: any) => 
-        item.participations.reduce((sum: number, p: any) => sum + p.medalsCount, 0)
-      );
-      this.createChart(countries, participations);
+    this.olympicService.getOlympics().subscribe((data) => {
+      this.olympics = data;
+      this.createChart();
     });
   }
 
+  createChart(): void {
+    const labels = this.olympics.map((country) => country.country);
+    const data = this.olympics.map((country) =>
+      country.participations.reduce((sum, p) => sum + p.medalsCount, 0)
+    );
 
-  createChart(countries: string[], participations: number[]) {
-    const ctx = document.getElementById('pieChart') as HTMLCanvasElement;
-    this.chart = new Chart(ctx, {
+
+    this.chart = new Chart('homeChart', {
       type: 'pie',
       data: {
-        labels: countries,
+        labels: labels,
         datasets: [
           {
-            label: 'Total Medals',
-            data: participations,
+            label: 'Total Médailles',
+            data: data,
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',
               'rgba(255, 206, 86, 0.2)',
               'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)'
+              'rgba(153, 102, 255, 0.2)',
             ],
             borderColor: [
               'rgba(255, 99, 132, 1)',
               'rgba(54, 162, 235, 1)',
               'rgba(255, 206, 86, 1)',
               'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)'
+              'rgba(153, 102, 255, 1)',
             ],
             borderWidth: 1,
           },
@@ -61,17 +57,17 @@ export class HomeComponent implements OnInit {
       },
       options: {
         responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
+        onClick: (event, elements) => {
+          if (elements.length > 0) {
+            const index = elements[0].index;
+            const selectedCountry = this.olympics[index];
+            this.router.navigate(['/detail', selectedCountry.id]);
+          }
         },
       },
     });
   }
-  
 }
-
 
 
 
