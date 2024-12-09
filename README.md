@@ -15,8 +15,13 @@ Avant de démarrer, assurez-vous d'avoir les outils suivants installés sur votr
 
 # Installation
 
+## Accédez à l'application
+
+http://localhost:4200
+
 ## Clonez le dépôt :
 
+```bash
 git clone https://github.com/GatienO/Olympics.git
 
 ```bash
@@ -31,6 +36,3 @@ npm install
 Lancez le serveur de développement :
 ng serve
 
-# Accédez à l'application
-
-http://localhost:4200
