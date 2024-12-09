@@ -19,11 +19,12 @@ Avant de démarrer, assurez-vous d'avoir les outils suivants installés sur votr
 
 git clone https://github.com/GatienO/Olympics.git
 
-cd Olympics
+
+'cd Olympics'
 
 Exécutez la commande suivante pour installer toutes les dépendances nécessaires :
 
-npm install
+'npm install'
 
 # Démarrage de l'application
 
