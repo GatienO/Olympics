@@ -24,15 +24,12 @@ http://localhost:4200
 ```bash
 git clone https://github.com/GatienO/Olympics.git
 
-
+# Accéder au dossier
 cd Olympics
 
-Exécutez la commande suivante pour installer toutes les dépendances nécessaires :
-
+# Exécutez la commande suivante pour installer toutes les dépendances nécessaires :
 npm install
 
-# Démarrage de l'application
-
-Lancez le serveur de développement :
+# Lancez le serveur de développement
 ng serve
 
