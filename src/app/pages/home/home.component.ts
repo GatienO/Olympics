@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { CardComponent } from 'src/app/components/card/card.component'; // Import du composant standalone
 
 /**
  * HomeComponent
@@ -15,6 +16,8 @@ import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
+  imports: [CardComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })

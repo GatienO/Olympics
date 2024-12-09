@@ -1,6 +1,8 @@
-<h2>Olympic Games App</h2>
-<button (click)="retour()">Retour</button>
 
+<button (click)="retour()">Retour</button>
+<app-card [items]="[{ title: 'Total des medailles', value: totalMedals ?? 0 }, { title: 'Total des athlètes', value: totalAthletes ?? 0 }]">
+  <div card-header>Informations</div>
+</app-card>
 <div class="chart-container">
   <canvas id="detailChart"></canvas>
 </div>

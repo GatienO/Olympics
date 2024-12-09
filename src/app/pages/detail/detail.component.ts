@@ -3,6 +3,7 @@ import { Chart } from 'chart.js';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CardComponent } from 'src/app/components/card/card.component';
 
 
 /**
@@ -15,7 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-detail',
   standalone: true,
-  imports: [],
+  imports: [CardComponent],
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss'
 })
@@ -32,6 +33,13 @@ export class DetailComponent implements OnInit {
 
   /* Data for the selected country, if available.*/
   countryData: Olympic | null = null;
+
+
+  /** Total number of medals won by the selected country. */
+  totalMedals: number | null = null;
+
+  /** Total number of athletes who participated for the selected country. */
+  totalAthletes: number | null = null;
 
 
   /**
@@ -62,6 +70,7 @@ export class DetailComponent implements OnInit {
 
    /**
    * Loads the data for the selected country based on the `countryId` from the route.
+   * Calculates total medals and total athletes for the selected country.
    * If the country is not found, navigates back to the home page.
    */
   loadCountryData(): void {
@@ -81,6 +90,8 @@ export class DetailComponent implements OnInit {
   
         if (this.countryData) {
           console.log('Données du pays sélectionné :', this.countryData);
+          this.totalMedals = this.calculateTotalMedals();
+          this.totalAthletes = this.calculateTotalAthletes();
           this.createChart();
         } else {
           console.warn('Aucun pays trouvé avec cet ID.');
@@ -90,6 +101,24 @@ export class DetailComponent implements OnInit {
     });
   }
 
+
+    /**
+   * Calcule le nombre total de médailles pour le pays sélectionné.
+   * @returns Le nombre total de médailles ou null si aucun pays n'est sélectionné.
+   */
+    calculateTotalMedals(): number | null {
+      if (!this.countryData || !this.countryData.participations) {
+        return null;
+      }
+      return this.countryData.participations.reduce((total, participation) => total + participation.medalsCount, 0);
+    }
+
+    calculateTotalAthletes(): number | null {
+      if (!this.countryData || !this.countryData.participations) {
+        return null;
+      }
+      return this.countryData.participations.reduce((total, participation) => total + participation.athleteCount, 0);
+    }
 
     /**
    * Creates a line chart showing the medals won by the selected country over the years.
@@ -124,6 +153,8 @@ export class DetailComponent implements OnInit {
       },
     });
   }
+
+
 
   /**
    * Navigates back to the home page.
