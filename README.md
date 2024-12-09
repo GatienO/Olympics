@@ -24,11 +24,11 @@ http://localhost:4200
 ```bash
 git clone https://github.com/GatienO/Olympics.git
 
-```bash
+
 cd Olympics
 
 Exécutez la commande suivante pour installer toutes les dépendances nécessaires :
-```bash
+
 npm install
 
 # Démarrage de l'application
