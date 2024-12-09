@@ -22,6 +22,7 @@ http://localhost:4200
 ## Clonez le dépôt :
 
 ```bash
+# Télécharger le dossier depuis GitHub
 git clone https://github.com/GatienO/Olympics.git
 
 # Accéder au dossier
