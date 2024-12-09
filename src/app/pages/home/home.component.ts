@@ -6,18 +6,42 @@ import { Olympic } from 'src/app/core/models/Olympic';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+/**
+ * HomeComponent
+ *
+ * This component displays a summary of Olympic data including a pie chart of total medals won by each country.
+ * It fetches the data from the OlympicService and provides navigation to detailed views of individual countries.
+ */
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  /*List of Olympic data fetched from the service.*/
   olympics: Olympic[] = [];
+
+  /*Instance of the Chart.js chart displayed in the component.*/
   chart: any;
+
+  /*Subject used to manage the lifecycle of subscriptions and avoid memory leaks.*/
   private destroy$ = new Subject<void>();
+
+
+   /**
+   * Constructor
+   * @param olympicService Service to fetch Olympic data.
+   * @param router Angular Router for navigation.
+   */
 
   constructor(private olympicService: OlympicService, private router: Router) {}
 
+
+   /**
+   * Lifecycle hook that is called after component initialization.
+   * Fetches Olympic data and initializes the chart.
+   */
   ngOnInit(): void {
     this.olympicService.getOlympics()
     .pipe(takeUntil(this.destroy$))
@@ -29,12 +53,19 @@ export class HomeComponent implements OnInit {
 
 
 
+  /**
+   * Calculates the total number of participations across all countries.
+   * @returns The total number of participations.
+   */
   getTotalParticipations(): number {
     return this.olympics.flatMap(country => country.participations).length;
   }
 
 
 
+  /**
+   * Creates and initializes a pie chart to display the total medals won by each country.
+   */
   createChart(): void {
     const labels = this.olympics.map((country) => country.country);
     const data = this.olympics.map((country) =>
@@ -80,6 +111,10 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  /**
+   * Lifecycle hook that is called when the component is destroyed.
+   * Cleans up resources and unsubscribes from observables.
+   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
