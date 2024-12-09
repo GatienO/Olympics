@@ -1,0 +1,35 @@
+.card {
+    border: 2px solid #00b6d8;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    width: 300px;
+    margin: 10px auto;
+  }
+  
+  .card-header {
+    font-size: 1.5rem;
+    color: #006a78;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+  
+  .card-body {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .card-item {
+    text-align: center;
+  }
+  
+  .card-item-title {
+    font-size: 1rem;
+    color: gray;
+  }
+  
+  .card-item-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  

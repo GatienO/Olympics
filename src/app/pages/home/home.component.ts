@@ -3,6 +3,8 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 import { Chart } from 'chart.js/auto';
 import { Router } from '@angular/router';
 import { Olympic } from 'src/app/core/models/Olympic';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -12,22 +14,32 @@ import { Olympic } from 'src/app/core/models/Olympic';
 export class HomeComponent implements OnInit {
   olympics: Olympic[] = [];
   chart: any;
+  private destroy$ = new Subject<void>();
 
   constructor(private olympicService: OlympicService, private router: Router) {}
 
   ngOnInit(): void {
-    this.olympicService.getOlympics().subscribe((data) => {
+    this.olympicService.getOlympics()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((data) => {
       this.olympics = data;
       this.createChart();
     });
   }
+
+
+
+  getTotalParticipations(): number {
+    return this.olympics.flatMap(country => country.participations).length;
+  }
+
+
 
   createChart(): void {
     const labels = this.olympics.map((country) => country.country);
     const data = this.olympics.map((country) =>
       country.participations.reduce((sum, p) => sum + p.medalsCount, 0)
     );
-
 
     this.chart = new Chart('homeChart', {
       type: 'pie',
@@ -66,6 +78,11 @@ export class HomeComponent implements OnInit {
         },
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
 

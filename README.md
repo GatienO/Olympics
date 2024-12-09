@@ -18,6 +18,7 @@ Avant de démarrer, assurez-vous d'avoir les outils suivants installés sur votr
 ## Clonez le dépôt :
 
 git clone https://github.com/GatienO/Olympics.git
+
 cd Olympics
 
 Exécutez la commande suivante pour installer toutes les dépendances nécessaires :
