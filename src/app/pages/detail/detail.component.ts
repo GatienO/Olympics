@@ -13,7 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class DetailComponent implements OnInit {
   olympics: Olympic[] = [];
-  chart: any;
+  chart: Chart | null = null;
   countryId: number | null = null;
   countryData: Olympic | null = null;
 
@@ -53,6 +53,7 @@ export class DetailComponent implements OnInit {
           this.createChart();
         } else {
           console.warn('Aucun pays trouvé avec cet ID.');
+          this.router.navigate(['/']);
         }
       }
     });
