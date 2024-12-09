@@ -103,8 +103,8 @@ export class DetailComponent implements OnInit {
 
 
     /**
-   * Calcule le nombre total de médailles pour le pays sélectionné.
-   * @returns Le nombre total de médailles ou null si aucun pays n'est sélectionné.
+   * Calculates the total number of medals won by the selected country.
+   * @returns The total number of medals, or `null` if no country data is available.
    */
     calculateTotalMedals(): number | null {
       if (!this.countryData || !this.countryData.participations) {
@@ -113,6 +113,12 @@ export class DetailComponent implements OnInit {
       return this.countryData.participations.reduce((total, participation) => total + participation.medalsCount, 0);
     }
 
+
+
+    /**
+   * Calculates the total number of athletes who participated for the selected country.
+   * @returns The total number of athletes, or `null` if no country data is available.
+   */
     calculateTotalAthletes(): number | null {
       if (!this.countryData || !this.countryData.participations) {
         return null;
@@ -120,6 +126,8 @@ export class DetailComponent implements OnInit {
       return this.countryData.participations.reduce((total, participation) => total + participation.athleteCount, 0);
     }
 
+
+    
     /**
    * Creates a line chart showing the medals won by the selected country over the years.
    */
