@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CardComponent } from 'src/app/components/card/card.component';
+import { Subject, takeUntil } from 'rxjs';
 
 
 /**
@@ -20,7 +21,9 @@ import { CardComponent } from 'src/app/components/card/card.component';
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss'
 })
-export class DetailComponent implements OnInit {
+
+
+export class DetailComponent implements OnInit, OnDestroy {
   /*List of all Olympic data.*/
   olympics: Olympic[] = [];
 
@@ -41,6 +44,9 @@ export class DetailComponent implements OnInit {
   /** Total number of athletes who participated for the selected country. */
   totalAthletes: number | null = null;
 
+  /*Subject used to manage the lifecycle of subscriptions and avoid memory leaks.*/
+  private destroy$ = new Subject<void>();
+
 
   /**
    * Constructor
@@ -59,8 +65,12 @@ export class DetailComponent implements OnInit {
    * Loads the initial data and retrieves the country data based on the route parameter.
    */
   ngOnInit(): void {
-    this.olympicService.loadInitialData().subscribe(() => {
-      this.route.paramMap.subscribe((params) => {
+    this.olympicService.loadInitialData()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(() => {
+      this.route.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
         const id = params.get('id');
         this.countryId = id ? parseInt(id, 10) : null;
         this.loadCountryData();
@@ -68,13 +78,17 @@ export class DetailComponent implements OnInit {
     });
   }
 
+
+
    /**
    * Loads the data for the selected country based on the `countryId` from the route.
    * Calculates total medals and total athletes for the selected country.
    * If the country is not found, navigates back to the home page.
    */
   loadCountryData(): void {
-    this.olympicService.getOlympics().subscribe((data) => {
+    this.olympicService.getOlympics()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((data) => {
       if (!data) {
         console.error('Aucune donnée reçue !');
         return;
@@ -127,7 +141,7 @@ export class DetailComponent implements OnInit {
     }
 
 
-    
+
     /**
    * Creates a line chart showing the medals won by the selected country over the years.
    */
@@ -162,12 +176,15 @@ export class DetailComponent implements OnInit {
     });
   }
 
-
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   /**
    * Navigates back to the home page.
    */
-  retour(): void {
+  backButton(): void {
     this.router.navigate(['/']);
   }
 }

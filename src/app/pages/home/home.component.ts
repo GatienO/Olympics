@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { Chart } from 'chart.js/auto';
 import { Router } from '@angular/router';
@@ -21,7 +21,7 @@ import { CardComponent } from 'src/app/components/card/card.component'; // Impor
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   /*List of Olympic data fetched from the service.*/
   olympics: Olympic[] = [];
 
