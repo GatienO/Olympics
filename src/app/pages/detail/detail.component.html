@@ -1,6 +1,6 @@
 
 <button (click)="backButton()">Retour</button>
-<app-card [items]="[{ title: 'Total des medailles', value: totalMedals ?? 0 }, { title: 'Total des athlètes', value: totalAthletes ?? 0 }]">
+<app-card [items]="[{ title: 'Total des medailles', value: totalMedals ?? 0 }, { title: 'Total des athlètes', value: totalAthletes ?? 0 }, { title: 'Nombre de participation', value: getCountryParticipationYears() ?? 0 }]">
   <div card-header>Informations</div>
 </app-card>
 <div class="chart-container">

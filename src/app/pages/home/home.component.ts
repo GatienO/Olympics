@@ -61,7 +61,15 @@ export class HomeComponent implements OnInit, OnDestroy {
    * @returns The total number of participations.
    */
   getTotalParticipations(): number {
-    return this.olympics.flatMap(country => country.participations).length;
+    const uniqueYears = new Set<number>();
+
+    this.olympics.forEach((country) => {
+      country.participations.forEach((participation) => {
+        uniqueYears.add(participation.year);
+      });
+    });
+
+    return uniqueYears.size;
   }
 
 

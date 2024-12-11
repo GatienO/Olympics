@@ -140,6 +140,20 @@ export class DetailComponent implements OnInit, OnDestroy {
       return this.countryData.participations.reduce((total, participation) => total + participation.athleteCount, 0);
     }
 
+    
+    getCountryParticipationYears(): number | null {
+      if (!this.countryData || !this.countryData.participations) {
+        return null;
+      }
+    
+      const uniqueYears = new Set<number>();
+    
+      this.countryData.participations.forEach((participation) => {
+        uniqueYears.add(participation.year);
+      });
+    
+      return uniqueYears.size;
+    }
 
 
     /**
